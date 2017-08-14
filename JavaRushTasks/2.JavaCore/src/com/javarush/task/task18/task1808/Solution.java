@@ -18,25 +18,23 @@ public class Solution {
         FileOutputStream outputStream2 = new FileOutputStream(s2);
         FileOutputStream outputStream3 = new FileOutputStream(s3);
 
-        if (inputStream1.available()%2==0){
-            byte[] buffer = new byte[inputStream1.available()/2];
-            int count = inputStream1.read(buffer);
-            outputStream2.write(count);
-            outputStream3.write(inputStream1.available());
-            inputStream1.close();
-            outputStream2.close();
-            outputStream3.close();
-        }else {
-            byte[] buffer = new byte[(inputStream1.available()/2)+1];
-            int count = inputStream1.read(buffer);
-            outputStream2.write(count);
-            outputStream3.write(inputStream1.available());
-            inputStream1.close();
-            outputStream2.close();
-            outputStream3.close();
-
+        while (inputStream1.available() > 0) {
+            byte[] buff = new byte[inputStream1.available()];
+            int count = inputStream1.read(buff);
+            if (count%2==0) {
+                outputStream2.write(buff, 0, count/2);
+                outputStream3.write(buff, count/2, count/2);
+            }
+            else if (count%2!=0){
+                outputStream2.write(buff, 0, (count/2)+1);
+                outputStream3.write(buff, (count/2)+1, count-((count/2)+1));
+            }
         }
 
+        reader.close();
+        inputStream1.close();
+        outputStream2.close();
+        outputStream3.close();
 
     }
 }
